@@ -25,15 +25,19 @@ class PostBodyFormData(Resource):
     """Post Body Form Data"""
 
     def post(self):
+        print('==> FUN : PostBodyFormData')
+
         parse = reqparse.RequestParser()
-        parse.add_argument('i', type=int, location='form', help='int data')
+        parse.add_argument('i', type=int, location='form', required=True, help='int data')
         parse.add_argument('str', type=str, location='form', help='string data')
+        parse.add_argument('list', type=str, location='form', help='list data')
         parse.add_argument('json_str', type=str, location='form', help='json string data')
         args = parse.parse_args()
 
         print(args)
         print('>> i ', args.i)
         print('>> str ', args.str)
+        print('>> list ', args.list)
         print('>> json_str ', args.json_str)
         if args.json_str:
             json_data = json.loads(args.json_str)
@@ -46,6 +50,8 @@ class PostBodyFormJson(Resource):
     """Post Body Form JSON"""
 
     def post(self):
+        print('==> FUN : PostBodyFormJson')
+
         parse = reqparse.RequestParser()
         parse.add_argument('name', type=str, location='json')
         parse.add_argument('age', type=int, location='json')
@@ -63,6 +69,8 @@ class PostBodyFormFile(Resource):
     """上传文件"""
 
     def post(self):
+        print('==> FUN : PostBodyFormFile')
+
         parse = reqparse.RequestParser()
         parse.add_argument('file', type=werkzeug.datastructures.FileStorage, location='files')
         args = parse.parse_args()
@@ -72,7 +80,7 @@ class PostBodyFormFile(Resource):
             app.logger.info('file no setting')
             return 'file no setting', 417
 
-        with open('out_'+file_obj.filename, 'wb+') as f:
+        with open('tmp/out_'+file_obj.filename, 'wb+') as f:
             file_data = file_obj.read()
             f.write(file_data)
 
