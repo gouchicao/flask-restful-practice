@@ -3,13 +3,10 @@
 ## [REST服务脚手架](flask-restful-scaffold.py)
 ``` Python
 import os
-import json
 import logging
 
-import werkzeug
 from flask import Flask, redirect, jsonify
-from flask_restful import Api, Resource, reqparse, abort
-from flask_restful_swagger import swagger
+from flask_restful import Api, Resource, reqparse
 
 
 app = Flask(__name__, static_folder='static')
@@ -24,11 +21,14 @@ app.logger.addHandler(file_handler)
 app.logger.setLevel(logging.INFO)
 
 
+# curl --request GET 'http://127.0.0.1:5000/get_data'
 class GetData(Resource):
     def get(self):
 
         return jsonify({"i":123, "str":"hello world"})
 
+
+# curl --request POST 'http://127.0.0.1:5000/post_data' --form 'i=123' --form 'str=hello world'
 class PostData(Resource):
     def post(self):
         parse = reqparse.RequestParser()
