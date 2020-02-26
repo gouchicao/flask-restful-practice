@@ -38,7 +38,6 @@ API_URL = 'http://127.0.0.1:5000/'
 MAX_RETRIES = 60
 
 
-#curl -v -H 'Content-Type: multipart/form-data' --form 'i=123' --form 'str="hello world"' --form 'list="[1, 2, 3]"' --form 'json_str={"name": "wjj","age": 40,"sons": ["wrj", "wxl"]}' http://127.0.0.1:5000/test/post_body_form_data
 def post_body_form_data():
     json_data = {
         "name": "wjj",
@@ -55,7 +54,6 @@ def post_body_form_data():
     print(response.status_code, response.reason, response.text, end='')
 
 
-#curl -v -H 'Content-Type: application/json' --data-raw '{"name": "wjj","age": 40,"sons": ["wrj", "wxl"]}' http://127.0.0.1:5000/test/post_body_form_json
 def post_body_form_json():
     headers = {
         'Content-Type': 'application/json'
@@ -72,7 +70,6 @@ def post_body_form_json():
     print(response.status_code, response.reason, response.text, end='')
 
 
-#curl -v -H 'Content-Type: multipart/form-data' -F 'file=@test.jpg' http://127.0.0.1:5000/test/post_body_form_file
 def post_body_form_file():
     filename = 'test.jpg'
     files = {'file': (filename, open(filename, 'rb'), 'application/octet-stream', {})}

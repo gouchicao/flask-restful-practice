@@ -1,11 +1,10 @@
 import os
 import json
 import logging
-import tempfile
 
 import werkzeug
-from flask import Flask, request, jsonify, make_response, redirect, url_for, send_file
-from flask_restful import reqparse, abort, Api, Resource
+from flask import Flask, redirect
+from flask_restful import Api, Resource, reqparse, abort
 from flask_restful_swagger import swagger
 
 
@@ -13,12 +12,13 @@ app = Flask(__name__, static_folder='static')
 api = swagger.docs(Api(app), apiVersion='1.0',
                    description='Flask RESTful Test API')
 
-file_handler = logging.FileHandler('app.log')
-app.logger.setLevel(logging.INFO)
+log_file = 'app.log'
+file_handler = logging.FileHandler(log_file)
 file_handler.setFormatter(logging.Formatter(
     '[%(asctime)s] %(levelname)s in %(module)s: %(message)s'
 ))
 app.logger.addHandler(file_handler)
+app.logger.setLevel(logging.INFO)
 
 
 class PostBodyFormData(Resource):
