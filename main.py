@@ -3,7 +3,7 @@ import json
 import logging
 
 import werkzeug
-from flask import Flask, redirect
+from flask import Flask, redirect, request
 from flask_restful import Api, Resource, reqparse, abort
 from flask_restful_swagger import swagger
 
@@ -70,6 +70,7 @@ class PostBodyFormFile(Resource):
 
     def post(self):
         print('==> FUN : PostBodyFormFile')
+        print(request.values)
 
         parse = reqparse.RequestParser()
         parse.add_argument('file', type=werkzeug.datastructures.FileStorage, location='files')
@@ -80,11 +81,35 @@ class PostBodyFormFile(Resource):
             app.logger.info('file no setting')
             return 'file no setting', 417
 
-        with open('tmp/out_'+file_obj.filename, 'wb+') as f:
+        with open('tmp/'+file_obj.filename, 'wb+') as f:
             file_data = file_obj.read()
             f.write(file_data)
 
         return 'PostBodyFormFile Succeed', 200
+
+
+class PostBodyFormMultiFile(Resource):
+    """上传文件"""
+
+    def write_file(self, file_obj):
+        if file_obj:
+            with open('tmp/'+file_obj.filename, 'wb+') as f:
+                file_data = file_obj.read()
+                f.write(file_data)
+
+
+    def post(self):
+        print('==> FUN : PostBodyFormMultiFile')
+
+        parse = reqparse.RequestParser()
+        parse.add_argument('file1', type=werkzeug.datastructures.FileStorage, location='files')
+        parse.add_argument('file2', type=werkzeug.datastructures.FileStorage, location='files')
+        args = parse.parse_args()
+
+        self.write_file(args.file1)
+        self.write_file(args.file2)
+
+        return 'PostBodyFormMultiFile Succeed', 200
 
 
 class UploadFileAndValues(Resource):
@@ -114,6 +139,7 @@ class UploadFileAndValues(Resource):
 api.add_resource(PostBodyFormData, '/test/post_body_form_data')
 api.add_resource(PostBodyFormJson, '/test/post_body_form_json')
 api.add_resource(PostBodyFormFile, '/test/post_body_form_file')
+api.add_resource(PostBodyFormMultiFile, '/test/post_body_form_multi_file')
 api.add_resource(UploadFileAndValues, '/test/upload_file_and_values')
 
 

@@ -180,9 +180,16 @@ api.add_resource(PostBodyFormFile, '/test/post_body_form_file')
 ### 客户端
 * curl
 ``` bash
+# 设置为 application/octet-stream， 将会失败。
 curl --location --request POST 'http://127.0.0.1:5000/test/post_body_form_file' \
---header 'Content-Type: application/octet-stream' \
+--header 'Content-Type: multipart/form-data' \
 --form 'file=@test.jpg'
+
+# 多个文件
+curl --location --request POST 'http://127.0.0.1:5000/test/post_body_form_multi_file' \
+--header 'Content-Type: multipart/form-data' \
+--form 'file1=@test.jpg' \
+--form 'file2=@test1.jpg'
 ```
 
 * Python
